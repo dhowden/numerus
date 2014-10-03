@@ -25,57 +25,48 @@ func TestDescNumerals(t *testing.T) {
 	}
 }
 
-type testPair struct {
+var testPairs = []struct {
 	v uint
 	s string
-}
-
-var testPairs = []testPair{
-	testPair{1, "I"},
-	testPair{2, "II"},
-	testPair{3, "III"},
-	testPair{4, "IV"},
-	testPair{5, "V"},
-	testPair{6, "VI"},
-	testPair{7, "VII"},
-	testPair{8, "VIII"},
-	testPair{9, "IX"},
-	testPair{10, "X"},
-	testPair{19, "XIX"},
-	testPair{21, "XXI"},
-	testPair{1944, "MCMXLIV"},
-	testPair{1963, "MCMLXIII"},
-	testPair{1900, "MCM"},
-	testPair{2000, "MM"},
-	testPair{3999, "MMMCMXCIX"},
-}
-
-func testStringMethod(n uint, s string, t *testing.T) {
-	v := Numeral(n).String()
-	if v != s {
-		t.Errorf("input: %v, expected %v, got: %v", n, s, v)
-	}
+}{
+	{1, "I"},
+	{2, "II"},
+	{3, "III"},
+	{4, "IV"},
+	{5, "V"},
+	{6, "VI"},
+	{7, "VII"},
+	{8, "VIII"},
+	{9, "IX"},
+	{10, "X"},
+	{19, "XIX"},
+	{21, "XXI"},
+	{1944, "MCMXLIV"},
+	{1963, "MCMLXIII"},
+	{1900, "MCM"},
+	{2000, "MM"},
+	{3999, "MMMCMXCIX"},
 }
 
 func TestStringMethod(t *testing.T) {
 	for _, tm := range testPairs {
-		testStringMethod(tm.v, tm.s, t)
-	}
-}
-
-func testParseMethod(s string, u uint, t *testing.T) {
-	x, err := parse(s)
-	if err != nil {
-		t.Errorf("input: %v, error: %v", s, err)
-	}
-	if x != u {
-		t.Errorf("input: %v, expected: %v, got: %v", s, u, x)
+		got := Numeral(tm.v).String()
+		if got != tm.s {
+			t.Errorf("Numeral(%d).String() = %v, expected %v", tm.v, got, tm.s)
+		}
 	}
 }
 
 func TestParseMethod(t *testing.T) {
 	for _, tm := range testPairs {
-		testParseMethod(tm.s, tm.v, t)
+		got, err := parse(tm.s)
+		if err != nil {
+			t.Errorf("parse(%v) gave error error: %v", tm.s, err)
+			continue
+		}
+		if got != tm.v {
+			t.Errorf("parse(%v) = %d, expected: %d", tm.s, got, tm.v)
+		}
 	}
 }
 
@@ -98,7 +89,7 @@ var invalidInputs = []string{
 func TestInvalidInputs(t *testing.T) {
 	for _, in := range invalidInputs {
 		if _, err := Parse(in); err == nil {
-			t.Errorf("expected error on invalid input: %v", in)
+			t.Errorf("Parse(%v) should have returned an error", in)
 		}
 	}
 }
@@ -107,13 +98,13 @@ func TestConsistency(t *testing.T) {
 	i := uint(0)
 	max := Limit.Value()
 	for ; i < max; i++ {
-		n := Numeral(i)
-		x, err := parse(n.String())
+		s := Numeral(i).String()
+		x, err := parse(s)
 		if err != nil {
-			t.Errorf("input: %v, expected: %v, error: %v", n.String(), i, err)
+			t.Errorf("Numeral(%d).String() = %v, parse(%v) gave error: %v", i, s, s, err)
 		}
 		if x != i {
-			t.Errorf("input: %v, expected: %v, error: %v", n.String(), i, x)
+			t.Errorf("Numeral(%d).String() = %v, parse(%v) = %d, expected: %d", i, s, s, x, i)
 		}
 	}
 }
