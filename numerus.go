@@ -61,10 +61,10 @@ var (
 var descNumerals = []numeral{_M, _CM, _D, _CD, _C, _XC, _L, _XL, _X, _IX, _V, _IV, _I}
 
 // Limit is the upper bound of possible numerals allowed by this package
-// (this limit is set by the rule which prohibits more than three consecutive Ms)
+// (this limit is set by the rule which prohibits more than three consecutive Ms).
 const Limit = Numeral(3999)
 
-// Numeral represents a Roman Numeral value
+// Numeral represents a Roman Numeral value.
 type Numeral uint
 
 // String returns a string representing the underlying Numeral in standard
@@ -94,7 +94,7 @@ func (n Numeral) Value() uint {
 // and returns a uint and error value, which is set if the given input is not
 // in the standard representation.
 func parse(s string) (uint, error) {
-	// As overflowing doesn't catch this, we test for it first.
+	// As overflowing doesn't catch this, we test for it first
 	trivErr := regexp.MustCompile(`M{4,}`)
 	if t := trivErr.FindString(s); t != "" {
 		return 0, fmt.Errorf("invalid numeral near %v", t)
