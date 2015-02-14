@@ -59,12 +59,12 @@ func TestStringMethod(t *testing.T) {
 
 func TestParseMethod(t *testing.T) {
 	for _, tm := range testPairs {
-		got, err := parse(tm.s)
+		got, err := Parse(tm.s)
 		if err != nil {
 			t.Errorf("parse(%v) gave error error: %v", tm.s, err)
 			continue
 		}
-		if got != tm.v {
+		if got.Value() != tm.v {
 			t.Errorf("parse(%v) = %d, expected: %d", tm.s, got, tm.v)
 		}
 	}
