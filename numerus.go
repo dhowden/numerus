@@ -6,8 +6,8 @@
 package numerus
 
 import (
+	"errors"
 	"fmt"
-	"regexp"
 	"strings"
 )
 
@@ -95,9 +95,8 @@ func (n Numeral) Value() uint {
 // in the standard representation.
 func parse(s string) (uint, error) {
 	// As overflowing doesn't catch this, we test for it first
-	trivErr := regexp.MustCompile(`M{4,}`)
-	if t := trivErr.FindString(s); t != "" {
-		return 0, fmt.Errorf("invalid numeral near %v", t)
+	if strings.Contains(s, "MMMM") {
+		return 0, errors.New("invalid numeral near MMMM")
 	}
 
 	// Check the running totals so that we don't accept invalid input
