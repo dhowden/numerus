@@ -29,6 +29,7 @@ var testPairs = []struct {
 	v uint
 	s string
 }{
+	{0, ""},
 	{1, "I"},
 	{2, "II"},
 	{3, "III"},
