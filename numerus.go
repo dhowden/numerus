@@ -104,27 +104,26 @@ func parse(s string) (uint, error) {
 	check := make([]uint, len(descNumerals))
 
 	n := uint(0)
-	buf := s
 	for i, v := range descNumerals {
+		vs := v.String()
 		for {
-			vs := v.String()
-			if !strings.HasPrefix(buf, vs) {
+			if !strings.HasPrefix(s, vs) {
 				break
 			}
 
 			for j := 0; j < i; j++ {
 				check[j] += v.Value()
 				if check[j] >= descNumerals[j].Value() {
-					return 0, fmt.Errorf("invalid numeral near %v", buf)
+					return 0, fmt.Errorf("invalid numeral near %v", s)
 				}
 			}
 			n += v.Value()
-			buf = buf[len(vs):]
+			s = s[len(vs):]
 		}
 	}
 
-	if len(buf) > 0 {
-		return 0, fmt.Errorf("invalid numeral near %v", buf)
+	if len(s) > 0 {
+		return 0, fmt.Errorf("invalid numeral near %v", s)
 	}
 	return n, nil
 }
