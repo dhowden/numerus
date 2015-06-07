@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package numerus is a simple implemetation of Roman Numerals.
+// Package numerus provides methods for parsing and creating Roman Numerals.  See
+// http://en.wikipedia.org/wiki/Roman_numerals for more details.
 package numerus
 
 import (
