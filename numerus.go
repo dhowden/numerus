@@ -107,20 +107,19 @@ func parse(s string) (uint, error) {
 	buf := s
 	for i, v := range descNumerals {
 		for {
-			if x := strings.TrimPrefix(buf, v.String()); len(x) < len(buf) {
-				if i > 0 {
-					for j := 0; j < i; j++ {
-						check[j] += v.Value()
-						if check[j] >= descNumerals[j].Value() {
-							return 0, fmt.Errorf("invalid numeral near %v", buf)
-						}
-					}
-				}
-				n += v.Value()
-				buf = x
-			} else {
+			vs := v.String()
+			if !strings.HasPrefix(buf, vs) {
 				break
 			}
+
+			for j := 0; j < i; j++ {
+				check[j] += v.Value()
+				if check[j] >= descNumerals[j].Value() {
+					return 0, fmt.Errorf("invalid numeral near %v", buf)
+				}
+			}
+			n += v.Value()
+			buf = buf[len(vs):]
 		}
 	}
 
