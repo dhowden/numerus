@@ -104,6 +104,7 @@ func parse(s string) (uint, error) {
 	// i.e. MCMD should be MMCD
 	check := make([]uint, len(descNumerals))
 
+	orig := s
 	n := uint(0)
 	for i, v := range descNumerals {
 		vs := v.String()
@@ -115,7 +116,7 @@ func parse(s string) (uint, error) {
 			for j := 0; j < i; j++ {
 				check[j] += v.Value()
 				if check[j] >= descNumerals[j].Value() {
-					return 0, fmt.Errorf("invalid numeral near %v", s)
+					return 0, fmt.Errorf("invalid numeral %#v after %#v", s, orig[:len(orig)-len(s)])
 				}
 			}
 			n += v.Value()
@@ -124,7 +125,7 @@ func parse(s string) (uint, error) {
 	}
 
 	if len(s) > 0 {
-		return 0, fmt.Errorf("invalid numeral near %v", s)
+		return 0, fmt.Errorf("invalid numeral %#v after %#v", s, orig[:len(orig)-len(s)])
 	}
 	return n, nil
 }
