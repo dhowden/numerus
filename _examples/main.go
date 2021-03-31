@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/dhowden/numerus"
 	"log"
-	"numerus"
 )
 
 func main() {
-	num, err := numerus.Parse("VI")
+	num, err := numerus.Parse("V")
 	if err != nil {
 		log.Println("error parsing", err)
 	}

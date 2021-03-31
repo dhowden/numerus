@@ -132,10 +132,10 @@ func parse(s string) (uint, error) {
 
 // Parse takes a string in standard Roman Numeral notation and returns a Numeral.
 // If the given representation is invalid an error is returned.
-func Parse(s string) (Numeral, error) {
+func Parse(s string) (uint, error) {
 	n, err := parse(s)
 	if err != nil {
-		return Numeral(0), err
+		return 0, err
 	}
-	return Numeral(n), err
+	return n, err
 }
