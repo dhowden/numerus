@@ -12,54 +12,44 @@ import (
 	"strings"
 )
 
-type numeral interface {
-	Value() uint
-	String() string
-}
-
-type sym struct {
+type num struct {
 	s string
 	v uint
 }
 
-func (s sym) Value() uint {
+func (s num) Value() uint {
 	return s.v
 }
 
-func (s sym) String() string {
+func (s num) String() string {
 	return s.s
 }
 
-type comb struct {
-	a, b sym // NB: a < b
-}
-
-func (c comb) Value() uint {
-	return c.b.Value() - c.a.Value()
-}
-
-func (c comb) String() string {
-	return c.a.String() + c.b.String()
+func comb(x, y num) num {
+	return num{
+		s: x.s + y.s,
+		v: y.v - x.v,
+	}
 }
 
 var (
-	_I = sym{"I", 1}
-	_V = sym{"V", 5}
-	_X = sym{"X", 10}
-	_L = sym{"L", 50}
-	_C = sym{"C", 100}
-	_D = sym{"D", 500}
-	_M = sym{"M", 1000}
+	_I = num{"I", 1}
+	_V = num{"V", 5}
+	_X = num{"X", 10}
+	_L = num{"L", 50}
+	_C = num{"C", 100}
+	_D = num{"D", 500}
+	_M = num{"M", 1000}
 
-	_IV = comb{_I, _V}
-	_IX = comb{_I, _X}
-	_XL = comb{_X, _L}
-	_XC = comb{_X, _C}
-	_CD = comb{_C, _D}
-	_CM = comb{_C, _M}
+	_IV = comb(_I, _V)
+	_IX = comb(_I, _X)
+	_XL = comb(_X, _L)
+	_XC = comb(_X, _C)
+	_CD = comb(_C, _D)
+	_CM = comb(_C, _M)
 )
 
-var descNumerals = []numeral{_M, _CM, _D, _CD, _C, _XC, _L, _XL, _X, _IX, _V, _IV, _I}
+var descNumerals = []num{_M, _CM, _D, _CD, _C, _XC, _L, _XL, _X, _IX, _V, _IV, _I}
 
 // Limit is the upper bound of possible numerals allowed by this package
 // (this limit is set by the rule which prohibits more than three consecutive Ms).
@@ -75,10 +65,7 @@ func (n Numeral) String() string {
 	i := uint(n)
 
 	for _, v := range descNumerals {
-		for {
-			if i < v.Value() {
-				break
-			}
+		for i >= v.Value() {
 			result += v.String()
 			i -= v.Value()
 		}
@@ -108,11 +95,7 @@ func parse(s string) (uint, error) {
 	n := uint(0)
 	for i, v := range descNumerals {
 		vs := v.String()
-		for {
-			if !strings.HasPrefix(s, vs) {
-				break
-			}
-
+		for strings.HasPrefix(s, vs) {
 			for j := 0; j < i; j++ {
 				check[j] += v.Value()
 				if check[j] >= descNumerals[j].Value() {

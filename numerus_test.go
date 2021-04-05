@@ -4,9 +4,7 @@
 
 package numerus
 
-import (
-	"testing"
-)
+import "testing"
 
 // TestDescNumerals is a sanity check for the internal array descNumerals
 // which must be strictly decreasing and contain non-zero values
@@ -60,14 +58,35 @@ func TestStringMethod(t *testing.T) {
 
 func TestParseMethod(t *testing.T) {
 	for _, tm := range testPairs {
-		got, err := Parse(tm.s)
-		if err != nil {
-			t.Errorf("parse(%v) gave error error: %v", tm.s, err)
-			continue
-		}
-		if got.Value() != tm.v {
-			t.Errorf("parse(%v) = %d, expected: %d", tm.s, got, tm.v)
-		}
+		t.Run(tm.s, func(t *testing.T) {
+			got, err := Parse(tm.s)
+			if err != nil {
+				t.Fatalf("parse(%v) gave error error: %v", tm.s, err)
+			}
+			if got.Value() != tm.v {
+				t.Errorf("parse(%v) = %d, expected: %d", tm.s, got, tm.v)
+			}
+		})
+	}
+}
+
+func BenchmarkParseMethod(b *testing.B) {
+	for _, tm := range testPairs {
+		b.Run(tm.s, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				Parse(tm.s)
+			}
+		})
+	}
+}
+
+func BenchmarkStringMethod(b *testing.B) {
+	for _, tm := range testPairs {
+		b.Run(tm.s, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = Numeral(tm.v).String()
+			}
+		})
 	}
 }
 
