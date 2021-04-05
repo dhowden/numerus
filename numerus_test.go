@@ -4,7 +4,10 @@
 
 package numerus
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 // TestDescNumerals is a sanity check for the internal array descNumerals
 // which must be strictly decreasing and contain non-zero values
@@ -127,4 +130,19 @@ func TestConsistency(t *testing.T) {
 			t.Errorf("Numeral(%d).String() = %v, parse(%v) = %d, expected: %d", i, s, s, x, i)
 		}
 	}
+}
+
+func ExampleParse() {
+	n, err := Parse("IV")
+	if err != nil {
+		fmt.Printf("Could not parse: %v", err)
+	}
+	fmt.Println(uint(n))
+	// Output: 4
+}
+
+func ExampleNumeral_String() {
+	n := Numeral(4)
+	fmt.Println(n)
+	// Output: IV
 }
