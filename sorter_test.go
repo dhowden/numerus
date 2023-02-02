@@ -106,3 +106,19 @@ func printList(numerals Numerals) {
 		fmt.Println(vands.String())
 	}
 }
+
+func ExampleSort() {
+	numerals := *new(Numerals)
+
+	slist := []string{"CII", "IV", "X", "IX"}
+	for _, s := range slist {
+		numeral, _ := Parse(s)
+		numerals = append(numerals, numeral)
+	}
+
+	fmt.Println("Before sort: ", numerals)
+	sort.Sort(numerals)
+	fmt.Println("After sort:  ", numerals)
+
+	// Output: [IV IX X CII]
+}

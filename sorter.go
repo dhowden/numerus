@@ -12,6 +12,7 @@ import (
 //  2. Less (true if the first element is less than the second)
 //  3. Swap (exchanges two element in the array)
 //
+// You can use any instance of Numerals simply as an array or slice
 // To invoke the sort on a Numerals object `numerals`, call
 // one of these two methods, depending the desired order:
 //
