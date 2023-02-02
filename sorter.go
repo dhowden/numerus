@@ -12,10 +12,11 @@ import (
 //  2. Less (true if the first element is less than the second)
 //  3. Swap (exchanges two element in the array)
 //
-// To invoke the sort on a Numerals object numerals, execute
-// the Sort method:
+// To invoke the sort on a Numerals object `numerals`, call
+// one of these two methods, depending the desired order:
 //
-//	sort.Sort(numerals).
+//	sort.Sort(numerals) // Ascending order
+//	sort.Sort(sort.Reverse(numerals)) // Descending order
 //
 // This will sort the array in place.
 type Numerals []Numeral
@@ -37,11 +38,6 @@ func (ns Numerals) Less(i int, j int) bool {
 // Exchanges two Numeral objects in the array.
 func (ns Numerals) Swap(i int, j int) {
 	ns[i], ns[j] = ns[j], ns[i]
-}
-
-func (ns Numerals) Copy() Numerals {
-	copy := make(Numerals, 0, len(ns))
-	return append(copy, ns...)
 }
 
 // String returns a string representation of the array
