@@ -116,9 +116,8 @@ func ExampleSort() {
 		numerals = append(numerals, numeral)
 	}
 
-	fmt.Println("Before sort: ", numerals)
 	sort.Sort(numerals)
-	fmt.Println("After sort:  ", numerals)
+	fmt.Println(numerals)
 
 	// Output: [IV IX X CII]
 }
